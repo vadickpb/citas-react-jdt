@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid';
 
 export const Formulario = () => {
 
@@ -9,6 +10,8 @@ export const Formulario = () => {
         hora: '',
         sintomas: ''
     })
+
+    const [error, setError] = useState(false)
     
     //funcion que ejecuta cada vez que el usuario escribe en un input
     const handleInputChange = (e) => {
@@ -26,12 +29,25 @@ export const Formulario = () => {
     const submitCita = (e) => {
         e.preventDefault();
 
-        alert('enviandooo')
+        //Validar
+        if (mascota.trim() === '' || propietario.trim() === '' || fecha.trim() === '' || hora.trim() === '' || sintomas.trim() === ''){
+            setError(true)
+            return;
+        }
+
+        //Eliminar mensaje previo
+        setError(false);
+
+        //Asignar un Id
+        cita.id = uuidv4();
+        console.log(cita);
     }
     
     return (
         <>
-        <h2>Crear Cita</h2>  
+        <h2>Crear Cita</h2>
+
+        { error ? <p className = "alerta-error">Todos los campos son obligatorios</p> : ''}
         
         <form onSubmit = {submitCita}>
             <label>Nombre de Mascota</label>
