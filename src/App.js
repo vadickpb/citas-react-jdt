@@ -1,11 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Cita } from './components/Cita';
 import { Formulario } from './components/Formulario'
 
 export const App = () => {
 
+  //citas en local storage
+  let citasIniciales = JSON.parse(localStorage.getItem('citas'));
+  if(!citasIniciales){
+    citasIniciales = [];
+  }
+
+  //Arreglo de citas
   const [citas, setCitas] = useState([]);
 
+  //UseEffect oara realizar alguna operacion cuando cambie el state
+  useEffect(() =>{
+    if (citasIniciales) {
+      localStorage.setItem('citas', JSON.stringify(citas))
+    } else {
+      localStorage.setItem('citas', JSON.stringify([]));
+    }
+  },[citas, citasIniciales])
+
+  //funcion que toma las citas actuales y agrega una nueva
   const agregarCita = cita => {
     setCitas([
       ...citas,
@@ -13,6 +30,7 @@ export const App = () => {
     ])
   }
 
+  //Función que elimina una cita por su id
   const eliminarCita = id => {
     const nuevaCita = citas.filter(cita => cita.id !== id);
     setCitas(nuevaCita);
